@@ -124,6 +124,9 @@ const createuser = async function (req, res) {
 
 
         if (address) {
+            if(typeof address != "object"){
+            return res.status(400).send({status:false,msg:"Please Enter Valid Address"})
+            }
             if (Object.keys(address).length == 0) {
                 return res.status(400).send({ status: false, msg: "please enter address Details" })
             }
@@ -188,10 +191,10 @@ const userLogin = async (req, res) => {
 
 
         if (!password) {
-            return res.status(400).send({ status: false, msg: "Please Enter Email_ID " })
+            return res.status(400).send({ status: false, msg: "Please Enter Password" })
         }
         if (!isPassword(password)) {
-            return res.status(400).send({ status: false, msg: "Please Enter Valid Email_ID" })
+            return res.status(400).send({ status: false, msg: "Please Enter Valid Password" })
         }
 
         let passwordCheck = await userModel.findOne({ email: email, password: password })
@@ -209,7 +212,7 @@ const userLogin = async (req, res) => {
 
 
         res.setHeader("x-api-token", token)
-        res.status(201).send({ status: false, message: "Success", Data: token })
+        res.status(200).send({ status: false, message: "Success", Data: token })
 
     } catch (err) {
         return res.status(500).send({ status: false, error: err.message })

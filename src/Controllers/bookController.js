@@ -59,7 +59,7 @@ const createBooks = async function (req, res) {
         if (!isValidObjectId(userId)) {
             return res.status(400).send({ status: false, message: "Enter a Valid User Id" })
         }
-        let findId = await UserModel.findById(userId)
+        let findId = await UserModel.findOne({userId:userId,isDeleted:false})
         if (!findId) {
             return res.status(404).send({ status: false, message: "User not found" })
         }
@@ -124,8 +124,9 @@ const createBooks = async function (req, res) {
 const getBooksByQuery = async function (req, res) {
     try {
         let bodyData = req.query
+        
         if (Object.keys(bodyData).length === 0) {
-            let allBooks = await BookModel.find({ isDeleted: false }).select({ title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 }).sort({ title: 1 })
+            let allBooks = await BookModel.find({ isDeleted: false }).select({ title: 1, excerpt: 1, userId: 1, category: 1, releasedAt: 1, reviews: 1 }).sort({title: 1 })
 
             return res.status(200).send({ status: false, message: "List of All Books", data: allBooks })
         } else {
@@ -198,7 +199,7 @@ const getBookFromPath = async function (req, res) {
         }
         searchBook.reviewsData = reviewsdata
 
-        return res.status(201).send({ status: true, data: searchBook })
+        return res.status(200).send({ status: true, data: searchBook })
 
     } catch (err) {
         console.log(err)

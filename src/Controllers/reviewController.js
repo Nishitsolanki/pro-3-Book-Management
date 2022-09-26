@@ -177,7 +177,7 @@ const reviewUpdate = async function (req, res) {
         let bookdetails = await BookModel.findOneAndUpdate({ _id: bookId }, { $set: { reviews: count } }).lean()
         bookdetails.reviewsData = reviewsdata
 
-        return res.status(201).send({ status: true, message: "Success", data: bookdetails })
+        return res.status(200).send({ status: true, message: "Success", data: bookdetails })
 
     } catch (err) {
         console.log(error)
